@@ -361,7 +361,7 @@
 const CFG = {
   url:   "https://eomlonjcttgwwtyfruuk.supabase.co",   // e.g. https://abcdefgh.supabase.co
   key:   "sb_publishable_kh4jo3LZhloPWeBNBd6Mqg_HgaJINOJ",      // the anon / public key
-  board: "dd33e1dafe770a2e908944d081fb5360"
+  board: "dd33e1dafe770a2e908944d081fb5360", schema: "jobboard"
 };
 
 let unlocked = false;
@@ -474,7 +474,7 @@ function blankJob(){
 async function rpc(fn, args){
   const r = await fetch(CFG.url.replace(/\/$/, "") + "/rest/v1/rpc/" + fn, {
     method:"POST",
-    headers:{apikey:CFG.key, Authorization:"Bearer " + CFG.key, "Content-Type":"application/json"},
+    headers:{apikey:CFG.key, Authorization:"Bearer " + CFG.key, "Content-Type":"application/json", "Content-Profile":CFG.schema, "Accept-Profile":CFG.schema},
     body:JSON.stringify(args)
   });
   const text = await r.text();
