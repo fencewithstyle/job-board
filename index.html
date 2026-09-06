@@ -493,7 +493,7 @@ async function loadJobs(){
 }
 
 async function saveJob(id, body){
-  if(!unlocked){ openGate(); return; }
+  
   body.updatedAt = Date.now();
   const i = JOBS.findIndex(j => j.id === id);
   if(i >= 0) JOBS[i] = Object.assign({id}, body); else JOBS.push(Object.assign({id}, body));
@@ -503,8 +503,8 @@ async function saveJob(id, body){
 }
 
 async function removeJob(id){
-  if(!unlocked){ openGate(); return; }
-  const keep = JOBS.slice();
+  
+  if(!unlocked){ openGate(); return; } const keep = JOBS.slice();
   JOBS = JOBS.filter(j => j.id !== id);
   openId = null; render();
   try{ await rpc("jb_delete_job", {p_board:CFG.board, p_code:editCode, p_id:id}); setConn("live"); }
