@@ -517,7 +517,7 @@ function handleWriteError(e){
     unlocked = false; editCode = "";
     try{ localStorage.removeItem("fws_edit_code"); }catch(_){}
     renderLock();
-    flash("That edit code is no longer valid. Enter the current code to keep making changes.");
+    flash("That delete code is no longer valid. Enter the current code to remove jobs.");
     openGate();
     return;
   }
@@ -610,7 +610,7 @@ function renderFoot(){
   const flagged = JOBS.filter(flagFor).length;
   $("#foot").innerHTML = `${JOBS.length} job${JOBS.length === 1 ? "" : "s"} on the board &middot; ${done} complete &middot; `
     + `${flagged} needing attention &middot; `
-    + `${lf.toLocaleString()} linear feet tracked${unlocked ? " &middot; your changes save for everyone with this link" : " &middot; view only"}`;
+    + `${lf.toLocaleString()} linear feet tracked &middot; changes save for everyone with this link`;
 }
 
 function flash(msg){
@@ -855,15 +855,15 @@ document.body.appendChild(dl);
 /* ---------------- access gate ---------------- */
 function setConn(state){
   const dot = $("#dot"), t = $("#connText");
-  if(state === "live"){ dot.classList.remove("off"); t.textContent = unlocked ? "Live · editing on" : "Live · view only"; }
+  if(state === "live"){ dot.classList.remove("off"); t.textContent = "Live"; }
   else if(state === "loading"){ dot.classList.add("off"); t.textContent = "Loading"; }
   else { dot.classList.add("off"); t.textContent = "Offline"; }
 }
 function renderLock(){
   const b = $("#lockBtn");
-  b.textContent = unlocked ? "Editing on · lock" : "Unlock editing";
+  b.textContent = unlocked ? "Delete unlocked · lock" : "Unlock delete";
   b.classList.toggle("primary", !unlocked);
-  $("#newBtn").hidden = !unlocked;
+  $("#newBtn").hidden = false;
   setConn("live");
 }
 function openGate(){
@@ -872,17 +872,17 @@ function openGate(){
   const wrap = document.createElement("div");
   wrap.className = "modal gate";
   wrap.innerHTML = `
-    <div class="sheet" role="dialog" aria-label="Unlock editing">
+    <div class="sheet" role="dialog" aria-label="Unlock delete">
       <div class="dhead">
-        <div><h2>Unlock editing</h2><div class="brandsub">Fence With Style &middot; job board</div></div>
+        <div><h2>Unlock delete</h2><div class="brandsub">Fence With Style &middot; job board</div></div>
         <button class="btn ghost" data-act="cancel" aria-label="Cancel">Cancel &times;</button>
       </div>
       <div class="dbody">
         <div class="card">
           <p style="margin:0 0 12px;color:var(--ink-2)">
-            Anyone with this link can read the board. Enter the edit code to change statuses, dates and documents.
-            This device will remember it.</p>
-          <label class="f">Edit code
+            Anyone with this link can add jobs and update them. Removing a job needs the code.
+            Enter it once, this device remembers it, then press Remove again.</p>
+          <label class="f">Delete code
             <input id="gateCode" autocomplete="off" spellcheck="false" placeholder="e.g. FWS-BOARD-0000">
           </label>
           <div id="gateMsg" style="margin-top:9px;font-size:13px;color:var(--s-permit)"></div>
